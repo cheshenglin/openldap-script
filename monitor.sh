@@ -47,7 +47,7 @@ function saslauthd() {
     fi
 }
 
-slapd() {
+function slapd() {
     local name="slapd"
     local pid=$(get_slapd_pid)
     if [ -z "$pid" ]; then
