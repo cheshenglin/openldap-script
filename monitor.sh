@@ -63,7 +63,14 @@ function slapd() {
     local time_wait=$(printf "$connections" | grep 'TIME_WAIT' | wc -l)
     local total=$(printf "$connections" | wc -l)
 
-    local message="<14>$HOSTNAME $name[$pid] - $listen/$established/$close_wait/$time_wait/$total (L/E/CW/TW/Total) connections."
+    local priority='13'
+    if [ $close_wait -le 2 ]; then
+         priority='14'
+    elif [ $close_wait -ge 5 ]; then
+         priority='12'
+    fi
+
+    local message="<$priority>$HOSTNAME $name[$pid] - $listen/$established/$close_wait/$time_wait/$total (L/E/CW/TW/Total) connections."
     printf "$message" | nc -u $RSYSLOG_SERVER 514
 }
 
